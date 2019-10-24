@@ -14,8 +14,10 @@ public class OutputUserInterface {
     }
 
     private void printAccounts(List<Account> accounts) {
+        System.out.printf("%-20s %10s %10s %10s%n", "Name", "In", "Out", "Total");
+        System.out.println("-----------------------------------------------------");
         for (Account account : accounts) {
-            System.out.printf("%-20s %-10.2f %-10.2f %-10.2f%n",
+            System.out.printf("%-20s %10.2f %10.2f %10.2f%n",
                     account.getName(),
                     account.getTotalIncomingValue(),
                     account.getTotalOutgoingValue(),
