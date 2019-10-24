@@ -33,4 +33,22 @@ public class Account {
     public List<Transaction> getOutgoingTransactions() {
         return outgoingTransactions;
     }
+
+    public Double getTotalIncomingValue() {
+        return sumTransactions(incomingTransactions);
+    }
+
+    public Double getTotalOutgoingValue() {
+        return sumTransactions(outgoingTransactions);
+    }
+
+    public Double getBalance() {
+        return getTotalIncomingValue() - getTotalOutgoingValue();
+    }
+
+    private Double sumTransactions(List<Transaction> transactions) {
+        return transactions.stream()
+                .map(Transaction::getAmount)
+                .reduce(0.0, Double::sum);
+    }
 }

@@ -16,6 +16,10 @@ public class Bank {
         }
     }
 
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
     private Set<String> getUniqueNames(List<Transaction> transactions) {
         Set<String> uniqueNames = new HashSet<>();
 
