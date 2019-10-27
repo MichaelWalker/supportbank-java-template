@@ -1,10 +1,12 @@
-package training.supportbank.input;
+package training.supportbank.input.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import training.supportbank.Transaction;
+import training.supportbank.input.TransactionModel;
+import training.supportbank.input.TransactionParser;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,12 +30,10 @@ public class JsonTransactionParser implements TransactionParser {
     }
 
     @Override
-    public List<Transaction> parseFile(String filename) throws Exception {
+    public List<TransactionModel> parseFile(String filename) throws Exception {
         String jsonContent = getFileContent(filename);
         JsonTransactionModel[] models = gson.fromJson(jsonContent, JsonTransactionModel[].class);
-        return Arrays.stream(models)
-                .map(JsonTransactionModel::toTransaction)
-                .collect(Collectors.toList());
+        return Arrays.asList(models);
     }
 
     private String getFileContent(String filename) throws IOException {

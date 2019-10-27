@@ -3,9 +3,12 @@ package training.supportbank.input;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import training.supportbank.Transaction;
+import training.supportbank.input.csv.CsvTransactionParser;
+import training.supportbank.input.json.JsonTransactionParser;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class InputUserInterface {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -31,7 +34,13 @@ public class InputUserInterface {
             TransactionParser transactionParser = getTransactionParser(fileType);
 
             if (transactionParser != null) {
-                transactions = tryParseFile(transactionParser, filename);
+                List<TransactionModel> transactionModels = tryParseFile(transactionParser, filename);
+                if (transactionModels != null) {
+                    transactions = transactionModels
+                        .stream()
+                        .map(TransactionModel::toTransaction)
+                        .collect(Collectors.toList());
+                }
             }
         }
 
@@ -63,7 +72,7 @@ public class InputUserInterface {
         return null;
     }
 
-    private List<Transaction> tryParseFile(TransactionParser parser, String filename) {
+    private List<TransactionModel> tryParseFile(TransactionParser parser, String filename) {
         try {
             LOGGER.info("Attempting to parse file: " + filename);
             return parser.parseFile(filename);
