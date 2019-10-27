@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import training.supportbank.Transaction;
 import training.supportbank.input.csv.CsvTransactionParser;
 import training.supportbank.input.json.JsonTransactionParser;
+import training.supportbank.input.xml.XmlTransactionParser;
 
 import java.util.List;
 import java.util.Scanner;
@@ -20,7 +21,8 @@ public class InputUserInterface {
         scanner = new Scanner(System.in);
         transactionParsers = List.of(
                 new CsvTransactionParser(),
-                new JsonTransactionParser()
+                new JsonTransactionParser(),
+                new XmlTransactionParser()
         );
     }
 
