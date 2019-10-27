@@ -16,7 +16,8 @@ public class InputUserInterface {
     public InputUserInterface() {
         scanner = new Scanner(System.in);
         transactionParsers = List.of(
-                new CsvTransactionParser()
+                new CsvTransactionParser(),
+                new JsonTransactionParser()
         );
     }
 
