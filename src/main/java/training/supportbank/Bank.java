@@ -45,4 +45,13 @@ public class Bank {
 
         return account;
     }
+
+    public Account getAccount(String name) {
+        for (Account account : accounts) {
+            if (account.getName().equals(name)) {
+                return account;
+            }
+        }
+        return null;
+    }
 }
