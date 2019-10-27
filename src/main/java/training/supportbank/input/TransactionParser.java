@@ -18,15 +18,7 @@ public class TransactionParser {
     private static final Logger LOGGER = LogManager.getLogger();
 
     public List<Transaction> parseFile(String filename) throws IOException, ParseException {
-        List<String> lines;
-
-        try {
-            Path path = Path.of(filename);
-            lines = Files.readAllLines(path);
-        } catch(Exception e) {
-            LOGGER.error(String.format("Failed to read file: %s", filename), e);
-            throw e;
-        }
+        List<String> lines = getLinesFromFile(filename);
 
         List<Transaction> transactions = new ArrayList<>();
         for (int lineNumber=1; lineNumber <= lines.size(); lineNumber++) {
@@ -46,31 +38,46 @@ public class TransactionParser {
         return transactions;
     }
 
+    private List<String> getLinesFromFile(String filename) throws IOException {
+        try {
+            Path path = Path.of(filename);
+            return Files.readAllLines(path);
+        } catch(Exception e) {
+            LOGGER.error(String.format("Failed to read file: %s", filename), e);
+            throw e;
+        }
+    }
+
     private Transaction TransactionFromCsvLine(String csvLine) throws ParseException {
         String[] parts = csvLine.split(",");
 
-        Date date;
-        try {
-            date = new SimpleDateFormat("dd/MM/yyyy").parse(parts[0]);
-        } catch (ParseException e) {
-            System.out.printf("\033[31mERROR - Failed to convert %s to a date.\n\033[0m", parts[4]);
-            LOGGER.error(String.format("Failed to convert %s to an date.", parts[0]));
-            throw e;
-        }
+        Date date = tryParseDate(parts[0]);
         String from = parts[1];
         String to = parts[2];
         String description = parts[3];
-
-        Double amount;
-        try {
-            amount = Double.valueOf(parts[4]);
-        } catch (NumberFormatException e) {
-            System.out.printf("\033[31mERROR - Failed to convert %s to an amount.\n\033[0m", parts[4]);
-            LOGGER.error(String.format("Failed to convert %s to an amount.", parts[4]));
-            throw e;
-        }
+        Double amount = tryParseAmount(parts[4]);
 
         return new Transaction(date, from, to, description, amount);
+    }
+
+    private Date tryParseDate(String dateString) throws ParseException {
+        try {
+            return new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
+        } catch (ParseException e) {
+            System.out.printf("\033[31mERROR - Failed to convert %s to a date.\n\033[0m", dateString);
+            LOGGER.error(String.format("Failed to convert %s to an date.", dateString));
+            throw e;
+        }
+    }
+
+    private Double tryParseAmount(String amountString) throws NumberFormatException {
+        try {
+            return Double.valueOf(amountString);
+        } catch (NumberFormatException e) {
+            System.out.printf("\033[31mERROR - Failed to convert %s to an amount.\n\033[0m", amountString);
+            LOGGER.error(String.format("Failed to convert %s to an amount.", amountString));
+            throw e;
+        }
     }
 
     private boolean handleParseException(Exception e, String filename, Integer lineNumber) {
