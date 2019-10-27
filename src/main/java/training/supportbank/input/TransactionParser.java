@@ -1,4 +1,6 @@
-package training.supportbank;
+package training.supportbank.input;
+
+import training.supportbank.Transaction;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,8 +11,8 @@ import java.util.List;
 
 public class TransactionParser {
 
-    public List<Transaction> parseFile() throws IOException, ParseException {
-        Path path = Path.of("Transactions2014.csv");
+    public List<Transaction> parseFile(String filename) throws IOException, ParseException {
+        Path path = Path.of(filename);
         List<String> lines = Files.readAllLines(path);
 
         List<Transaction> transactions = new ArrayList<>();
