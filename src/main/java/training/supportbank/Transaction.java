@@ -1,7 +1,5 @@
 package training.supportbank;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Transaction {
@@ -37,17 +35,5 @@ public class Transaction {
 
     public Double getAmount() {
         return amount;
-    }
-
-    public static Transaction fromCsvLine(String csvLine) throws ParseException {
-        String[] parts = csvLine.split(",");
-
-        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(parts[0]);
-        String from = parts[1];
-        String to = parts[2];
-        String description = parts[3];
-        Double amount = Double.valueOf(parts[4]);
-
-        return new Transaction(date, from, to, description, amount);
     }
 }
